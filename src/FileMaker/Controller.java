@@ -9,6 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class Controller extends Application {
@@ -25,6 +26,8 @@ public class Controller extends Application {
     TextField savePath;
     @FXML
     TextField expression;
+    @FXML
+    TextField HTMLTagExp;
 
 
     @Override
@@ -88,7 +91,6 @@ public class Controller extends Application {
     }
 
 
-
     //extracts keywords through use of expression
     public void definitionExtract() throws IOException {
         //gets user input fields
@@ -105,7 +107,7 @@ public class Controller extends Application {
             //allows each word to have its own array element
             String[] list = def.split("\\s+");
             //for loop that goes through each word in the array
-            for (int i = 0; i < list.length; i++){
+            for (int i = 0; i < list.length; i++) {
                 // in the word i nthe array matches the user expression then the definition will trigger
                 if (list[i].equals(expr)) {
                     //this for loop will print all the words that are before the expression into the string buffer
@@ -114,6 +116,7 @@ public class Controller extends Application {
                         buffer.append(" ");
                     }
                     //adds a newline to the buffer indicating next term. once found the expression
+
                     buffer.append("\n");
                     //break the loop and move on to nextline as there can only be one seperator. if unsure about the totals, remove to append all that triggers the expression
                     break;
@@ -127,6 +130,20 @@ public class Controller extends Application {
         writer.flush();
         writer.close();
         reportLog.appendText("\n\n\nExtraction Complete");
+
+    }
+
+    public void HTMLTagAdder() {
+        //gets the user inputs
+        String tagExpr = HTMLTagExp.getText();
+        String term = "l";
+        String definition="2";
+        String fileOpen = openPath.getText();
+        String fileSave = savePath.getText();
+        //stores the HTML tags
+        String tagsAdded = "<"+tagExpr+" class=\"tooltip\">"+term+"<"+tagExpr+" class=\"tooltippopup\"><"+tagExpr+" class=\"tooltiptitle\">"+term+
+                "</"+tagExpr+"><"+tagExpr+" class=\"tooltiptext\">"+definition+"</"+tagExpr+">"+"</"+tagExpr+">"+"</"+tagExpr+">";
+
 
     }
 }

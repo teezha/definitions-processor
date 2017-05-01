@@ -14,6 +14,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="150.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
    </rowConstraints>
@@ -26,13 +27,16 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Full Definitions Input" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Save Path" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expression" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Report Log" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Report Log" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
       <TextField fx:id="savePath" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <TextField fx:id="openPath" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="expression" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Button mnemonicParsing="false" onAction="#openFile" prefHeight="25.0" prefWidth="191.0" text="Open..." GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <Button mnemonicParsing="false" onAction="#saveFile" prefHeight="25.0" prefWidth="118.0" text="Save..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <TextArea fx:id="reportLog" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <TextArea fx:id="reportLog" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       <Button mnemonicParsing="false" onAction="#definitionExtract" prefHeight="25.0" prefWidth="105.0" text="Extract..." GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="HTML Tag" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <TextField fx:id="HTMLTagExp" promptText="Do NOT put in symbols (i.e. &lt; / &gt;)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" onAction="#HTMLTagAdder" prefHeight="25.0" prefWidth="77.0" text="Compile..." GridPane.columnIndex="2" GridPane.rowIndex="4" />
    </children>
 </GridPane>
