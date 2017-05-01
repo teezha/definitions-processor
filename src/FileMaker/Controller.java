@@ -137,12 +137,11 @@ public class Controller extends Application {
         //gets the user inputs
         String tagExpr = HTMLTagExp.getText();
         String term = "l";
-        String definition="2";
+        String definition = "2";
         String fileOpen = openPath.getText();
         String fileSave = savePath.getText();
         //stores the HTML tags
-        String tagsAdded = "<"+tagExpr+" class=\"tooltip\">"+term+"<"+tagExpr+" class=\"tooltippopup\"><"+tagExpr+" class=\"tooltiptitle\">"+term+
-                "</"+tagExpr+"><"+tagExpr+" class=\"tooltiptext\">"+definition+"</"+tagExpr+">"+"</"+tagExpr+">"+"</"+tagExpr+">";
+        String tagsAdded = "<" + tagExpr + " class=\"tooltip\">" + term + "<" + tagExpr + " class=\"tooltippopup\"><" + tagExpr + " class=\"tooltiptitle\">" + term + "</" + tagExpr + "><" + tagExpr + " class=\"tooltiptext\">" + definition + "</" + tagExpr + ">" + "</" + tagExpr + ">" + "</" + tagExpr + ">";
 
 
     }
