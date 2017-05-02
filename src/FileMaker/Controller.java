@@ -9,8 +9,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Controller extends Application {
 
@@ -21,13 +21,17 @@ public class Controller extends Application {
     @FXML
     TextArea reportLog;
     @FXML
-    TextField openPath;
+    TextField fullInput;
+    @FXML
+    TextField termInput;
     @FXML
     TextField savePath;
     @FXML
     TextField expression;
     @FXML
     TextField HTMLTagExp;
+    @FXML
+    TextField HTMLInput;
 
 
     @Override
@@ -37,7 +41,7 @@ public class Controller extends Application {
 
 
     //opens files
-    public void openFile() throws FileNotFoundException {
+    public void openFullFile() throws FileNotFoundException {
 
         final String homedir = "I:\\Toby_BCIT";
         StringBuffer resultslog = new StringBuffer();
@@ -49,13 +53,13 @@ public class Controller extends Application {
             fileChooser.setInitialDirectory(new File(homedir));
             File input = fileChooser.showOpenDialog(gridPane.getScene().getWindow());
             //wipes input and output text space
-            openPath.setText("");
+            fullInput.setText("");
             savePath.setText("");
             //if invalid file selected throws invlaid file error at path bar, if not then sets path to selected file
             if (input != null) {
-                openPath.setText(String.valueOf(input));
+                fullInput.setText(String.valueOf(input));
             } else {
-                openPath.setText("Invalid File Selected");
+                fullInput.setText("Invalid File Selected");
             }
             //outputs file contents onto the input text space
             Scanner inputScan = new Scanner(input);
@@ -65,11 +69,60 @@ public class Controller extends Application {
             }
             //shows the content of the file to the results text area
             reportLog.setText(resultslog.toString());
+            savePath.setText(String.valueOf(input) + "_save");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    //opens files
+    public void openTermFile() throws FileNotFoundException {
+
+        final String homedir = "I:\\Toby_BCIT";
+        StringBuffer resultslog = new StringBuffer();
+
+        try {
+            //opens up the file chooser window
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open text file");
+            fileChooser.setInitialDirectory(new File(homedir));
+            File input = fileChooser.showOpenDialog(gridPane.getScene().getWindow());
+            //wipes input and output text space
+            termInput.setText("");
+            //if invalid file selected throws invlaid file error at path bar, if not then sets path to selected file
+            if (input != null) {
+                termInput.setText(String.valueOf(input));
+            } else {
+                termInput.setText("Invalid File Selected");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openHTML() throws FileNotFoundException {
+
+        final String homedir = "I:\\Toby_BCIT";
+        StringBuffer resultslog = new StringBuffer();
+
+        try {
+            //opens up the file chooser window
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open text file");
+            fileChooser.setInitialDirectory(new File(homedir));
+            File input = fileChooser.showOpenDialog(gridPane.getScene().getWindow());
+            //wipes input and output text space
+            HTMLInput.setText("");
+            //if invalid file selected throws invlaid file error at path bar, if not then sets path to selected file
+            if (input != null) {
+                HTMLInput.setText(String.valueOf(input));
+            } else {
+                HTMLInput.setText("Invalid File Selected");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     //file save procedure. Stores output into text field
     public void saveFile() throws FileNotFoundException {
@@ -95,7 +148,7 @@ public class Controller extends Application {
     public void definitionExtract() throws IOException {
         //gets user input fields
         String expr = expression.getText();
-        String fileOpen = openPath.getText();
+        String fileOpen = fullInput.getText();
         String fileSave = savePath.getText();
         //opens the text file via user input field path. Makes new buffer
         Scanner scanner = new Scanner(new File(fileOpen));
@@ -133,16 +186,86 @@ public class Controller extends Application {
 
     }
 
-    public void HTMLTagAdder() {
+    public void HTMLTagAdder() throws IOException {
+        //gets the user inputs
+        String termPath = termInput.getText();
+        String htmlPath = HTMLInput.getText();
+        String term;
+        //opens read/write functions
+        Scanner termScanner = new Scanner(new File(termPath));
+        Scanner htmlScanner = new Scanner(new File(htmlPath));
+
+        StringBuilder original = new StringBuilder();
+        while (htmlScanner.hasNext()) {
+            original.append(htmlScanner.nextLine());
+            original.append("\n");
+        }
+
+        String orignalRaw = original.toString();
+        int i = 0;
+        while (termScanner.hasNext()) {
+            term = termScanner.nextLine();
+            //regex
+            String taglessPattern = "(?<!\">)\\b" + term + "[s]?\\b(?!<)";
+            //stores the HTML tags
+            String tagsAdded = "<here>" + term + "<here>";
+            Pattern pattern = Pattern.compile(taglessPattern);
+            orignalRaw = pattern.matcher(orignalRaw).replaceAll(tagsAdded);
+            i++;
+            System.out.print(i + ": " + term + " Processed\n");
+        }
+
+
+        String fileSave = savePath.getText();
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fileSave)));
+        writer.write(orignalRaw);
+        writer.flush();
+        writer.close();
+        reportLog.appendText("\n\n\nFirst Step Complete!");
+    }
+
+    public void secondTagAdder() throws IOException {
         //gets the user inputs
         String tagExpr = HTMLTagExp.getText();
-        String term = "l";
-        String definition = "2";
-        String fileOpen = openPath.getText();
+        String termPath = termInput.getText();
+        String definitionPath = fullInput.getText();
+        String htmlPath = HTMLInput.getText();
+        String term;
+        String definition;
+        //opens read/write functions
+        Scanner termScanner = new Scanner(new File(termPath));
+        Scanner fullScanner = new Scanner(new File(definitionPath));
+        Scanner htmlScanner = new Scanner(new File(htmlPath));
+
+        StringBuilder original = new StringBuilder();
+        while (htmlScanner.hasNext()) {
+            original.append(htmlScanner.nextLine());
+            original.append("\n");
+        }
+
+        String orignalRaw = original.toString();
+        int i = 0;
+        while (termScanner.hasNext()) {
+            term = termScanner.nextLine();
+            definition = fullScanner.nextLine();
+            //regex
+            String taglessPattern = "<here>" + term + "<here>";
+
+            String tagsAdded = "<span class=\"tooltip\">"
+                    + term + "<span class=\"tooltippopup\"><span class=\"tooltiptitle\">" + term + "</span><span class=\"tooltiptext\">" + definition + "</span></span></span>";
+            Pattern pattern = Pattern.compile(taglessPattern);
+            orignalRaw = pattern.matcher(orignalRaw).replaceAll(tagsAdded);
+            i++;
+            System.out.print(i + ": " + term + " Processed\n");
+        }
+
         String fileSave = savePath.getText();
-        //stores the HTML tags
-        String tagsAdded = "<" + tagExpr + " class=\"tooltip\">" + term + "<" + tagExpr + " class=\"tooltippopup\"><" + tagExpr + " class=\"tooltiptitle\">" + term + "</" + tagExpr + "><" + tagExpr + " class=\"tooltiptext\">" + definition + "</" + tagExpr + ">" + "</" + tagExpr + ">" + "</" + tagExpr + ">";
 
-
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fileSave)));
+        writer.write(orignalRaw);
+        writer.flush();
+        writer.close();
+        reportLog.appendText("\n\n\nSecond Step Complete!");
     }
 }
