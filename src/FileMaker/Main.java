@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Pure HTML Peaking Definitions Replacer");
         primaryStage.setScene(new Scene(root, 600, 500));
         primaryStage.show();
     }

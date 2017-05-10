@@ -116,6 +116,7 @@ public class Controller extends Application {
             //if invalid file selected throws invlaid file error at path bar, if not then sets path to selected file
             if (input != null) {
                 HTMLInput.setText(String.valueOf(input));
+                savePath.setText(String.valueOf(input) + "_save.html");
             } else {
                 HTMLInput.setText("Invalid File Selected");
             }
@@ -206,11 +207,17 @@ public class Controller extends Application {
         while (termScanner.hasNext()) {
             term = termScanner.nextLine();
             //regex
-            String taglessPattern = "(?<!\">)\\b" + term + "[s]?\\b(?!<)";
+            String taglessPattern = "(?<!e>)\\b" + term + "[^s<]?\\b(?!<h)";
+            String sChecker = "(?<!e>)\\b" + term + "s\\b(?!<h)";
             //stores the HTML tags
-            String tagsAdded = "<here>" + term + "<here>";
+            String tagsAddedS = "<heres>" + term + "s<heres>";
+            Pattern tester = Pattern.compile(sChecker);
+            orignalRaw = tester.matcher(orignalRaw).replaceAll(tagsAddedS);
+
+            String tagsAdded = "<here>" + term + "<here> ";
             Pattern pattern = Pattern.compile(taglessPattern);
             orignalRaw = pattern.matcher(orignalRaw).replaceAll(tagsAdded);
+
             i++;
             System.out.print(i + ": " + term + " Processed\n");
         }
@@ -227,7 +234,6 @@ public class Controller extends Application {
 
     public void secondTagAdder() throws IOException {
         //gets the user inputs
-        String tagExpr = HTMLTagExp.getText();
         String termPath = termInput.getText();
         String definitionPath = fullInput.getText();
         String htmlPath = HTMLInput.getText();
@@ -239,23 +245,32 @@ public class Controller extends Application {
         Scanner htmlScanner = new Scanner(new File(htmlPath));
 
         StringBuilder original = new StringBuilder();
-        while (htmlScanner.hasNext()) {
+        while (htmlScanner.hasNextLine()) {
             original.append(htmlScanner.nextLine());
             original.append("\n");
         }
 
         String orignalRaw = original.toString();
         int i = 0;
-        while (termScanner.hasNext()) {
+        while (termScanner.hasNextLine()) {
             term = termScanner.nextLine();
             definition = fullScanner.nextLine();
             //regex
             String taglessPattern = "<here>" + term + "<here>";
-
+            String taglessPatternS = "<heres>" + term + "s<heres>";
             String tagsAdded = "<span class=\"tooltip\">"
-                    + term + "<span class=\"tooltippopup\"><span class=\"tooltiptitle\">" + term + "</span><span class=\"tooltiptext\">" + definition + "</span></span></span>";
+                    + term + "<span class=\"tooltippopup\">";
+            String tagsAddedS = "<span class=\"tooltip\">"
+                    + term + "s<span class=\"tooltippopup\">";
+            String defTags = "<span class=\"tooltiptitle\">" + term + "</span><span class=\"tooltiptext\">" + definition + "</span></span></span>";
             Pattern pattern = Pattern.compile(taglessPattern);
-            orignalRaw = pattern.matcher(orignalRaw).replaceAll(tagsAdded);
+
+            String withS = tagsAddedS + defTags;
+            String withoutS = tagsAdded + defTags;
+
+            orignalRaw = pattern.matcher(orignalRaw).replaceAll(withoutS);
+            Pattern patternS = Pattern.compile(taglessPatternS);
+            orignalRaw = patternS.matcher(orignalRaw).replaceAll(withS);
             i++;
             System.out.print(i + ": " + term + " Processed\n");
         }
