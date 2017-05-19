@@ -207,8 +207,8 @@ public class Controller extends Application {
         while (termScanner.hasNext()) {
             term = termScanner.nextLine();
             //regex
-            String taglessPattern = "(?<!e>)\\b" + term + "[^s<]?\\b(?!<h)";
-            String sChecker = "(?<!e>)\\b" + term + "s\\b(?!<h)";
+            String taglessPattern = "(?<![es]>)\\b" + term + "[^s<]?\\b(?!<h)";
+            String sChecker = "(?<![es]>)\\b" + term + "s\\b(?!<h)";
             //stores the HTML tags
             String tagsAddedS = "<heres>" + term + "s<heres>";
             Pattern tester = Pattern.compile(sChecker);
